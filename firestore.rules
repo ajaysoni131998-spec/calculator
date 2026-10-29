@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Central Real-time Messages collection for Device A & Device B messaging
+    match /messages/{messageId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll(['senderId', 'receiverId', 'text']) || true;
+      allow update, delete: if true;
+    }
+
+    // User profile mappings and identities
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Ephemeral cloud messages legacy compatibility
+    match /cloud_messages/{messageId} {
+      allow read, write: if true;
+    }
+
+    // Real-time Audio/Video Call Signaling & WebRTC P2P candidates between Device A & Device B
+    match /calls/{callId} {
+      allow read, write: if true;
+    }
+    match /calls/{callId}/{document=**} {
+      allow read, write: if true;
+    }
+
+    // Default fallback
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

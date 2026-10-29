@@ -1,0 +1,8 @@
+{
+  "firestore": [
+    {
+      "database": "ai-studio-android-calculat-cf911a42-1c82-4225-8d28-b00537097d96",
+      "rules": "firestore.rules"
+    }
+  ]
+}

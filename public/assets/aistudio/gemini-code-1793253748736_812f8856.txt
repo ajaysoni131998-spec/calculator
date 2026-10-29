@@ -1,0 +1,40 @@
+Meri WhatsApp jaisi full real-time cloud messaging web app ke liye complete working code provide karo. App internet ke through kaam karegi jisse dono users chahe kitni bhi lambi doori (long distance / different networks / different locations) par hon, messages instantly deliver aur sync ho sakein.
+
+Puri app ka architecture aur specifications:
+
+1. Cloud-Based Real-Time Sync (Long Distance / Over the Internet):
+   - Local network (LAN/Bluetooth/Localhost) par depend nahi hona chahiye. Global cloud backend ke liye Firebase Cloud Firestore use karo.
+   - Device A aur Device B chahe alag-alag internet connections (Wi-Fi, Mobile Data, different cities) par hon, dono ke beech WebSocket-based live connection ke zariye real-time sync chalna chahiye.
+   - Firestore ke `onSnapshot()` listener ka use karo taaki jaise hi Person A internet ke through cloud me message post kare, Person B ke device par micro-seconds me UI par message inject ho jaye (bina page refresh kiye).
+
+2. Simple Username Authentication (No Google/Email/Passwords):
+   - Simple plain username login (e.g., "rajan", "sanjana").
+   - Case-sensitivity aur unwanted spaces hatane ke liye input ko lowercase aur trim karo.
+   - Logged-in username ko browser ke localStorage me store karo taaki page reload ya app reopen hone par session bana rahe.
+   - Top bar me active logged-in user ka naam aur ek "Logout / Change User" button ho.
+
+3. Home Screen / Chat Menu:
+   - User ke active conversation threads ki list dikhaye (WhatsApp home screen jaisi).
+   - "Start New Chat" input field jisme samne wale ka simple username type karke direct conversation initiate ki ja sake.
+   - "Delete Entire Chat" from Menu:
+     * Har chat thread card par ek "Delete / Trash" icon ho.
+     * Jab user Person A ki chat delete kare, toh Person A ka poora conversation aur chat thread current user ke home menu aur view se permanently remove ho jaye.
+     * Technical logic: Chat document me `hiddenFor: [username]` list update karo ya client-side deleted threads filter lagao, taaki ye chat sirf delete karne wale ke device se hate, samne wale ke screen se tab tak na hate jab tak wo khud delete na kare.
+
+4. Chat Room & Messaging Engine:
+   - Shared Chat ID Logic: Dono usernames ko alphabetically sort karke common ID create karo (e.g., "rajan" aur "sanjana" ke beech ID hamesha "rajan_sanjana" rahegi, taaki dono alag-alag shehron se bhi ek hi thread se connect hon).
+   - Database Path: `chats/{chatId}/messages/{messageId}`
+   - Document Schema:
+     * senderId: sender ka username
+     * receiverId: receiver ka username
+     * text: message content
+     * timestamp: FieldValue.serverTimestamp() (server-side accurate time)
+   - Chat Header: Recipient ka username, "Back to Menu" button, aur ek "Clear Messages" ka option.
+
+5. Modern WhatsApp UI (Responsive for Mobile & Desktop):
+   - Sent message: Right side green bubble with clean typography.
+   - Received message: Left side white/gray bubble.
+   - Bottom input bar: Message box with Send button (jo Enter key press karne par bhi send kare).
+   - Loading aur offline indicator taaki pata chale internet active hai ya nahi.
+
+Pura single-file working code (HTML + Tailwind CSS + Firebase JS SDK v9/v10 modular syntax) provide karo jisme bas Firebase config keys paste karke hosting (Vercel/Netlify/Firebase Hosting) ya browser me run kiya ja sake.

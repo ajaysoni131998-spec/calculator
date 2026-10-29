@@ -1,0 +1,148 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with stealth user ID and display name",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID of the user"
+        },
+        "stealthUserId": {
+          "type": "string",
+          "description": "The unique stealth code ID or Gmail ID"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user"
+        },
+        "email": {
+          "type": "string",
+          "description": "Google Gmail address"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation"
+        }
+      },
+      "required": ["userId", "stealthUserId", "displayName", "createdAt"]
+    },
+    "CloudMessage": {
+      "title": "CloudMessage",
+      "description": "Cross-device encrypted ephemeral message",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique message ID"
+        },
+        "senderUserId": {
+          "type": "string",
+          "description": "Sender Stealth User ID or Gmail"
+        },
+        "recipientUserId": {
+          "type": "string",
+          "description": "Recipient Stealth User ID or Gmail"
+        },
+        "senderEmail": {
+          "type": "string",
+          "description": "Sender Gmail address"
+        },
+        "recipientEmail": {
+          "type": "string",
+          "description": "Recipient Gmail address"
+        },
+        "text": {
+          "type": "string",
+          "description": "Message text content"
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "Media type (NONE, IMAGE, AUDIO, LOCATION)"
+        },
+        "mediaPayload": {
+          "type": "string",
+          "description": "Media payload caption or audio duration"
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the sender"
+        },
+        "destructSeconds": {
+          "type": "number",
+          "description": "Self-destruct duration in seconds"
+        },
+        "isDestroyed": {
+          "type": "boolean",
+          "description": "Whether message has been destroyed"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of message creation"
+        }
+      },
+      "required": ["id", "senderUserId", "recipientUserId", "text", "authorUid", "destructSeconds", "isDestroyed", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Real-time chat message between Device A and Device B",
+      "type": "object",
+      "properties": {
+        "senderId": {
+          "type": "string",
+          "description": "Identifier of the sender device or user"
+        },
+        "receiverId": {
+          "type": "string",
+          "description": "Identifier of the receiver device or user"
+        },
+        "text": {
+          "type": "string",
+          "description": "Message content"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the message"
+        }
+      },
+      "required": ["senderId", "receiverId", "text"]
+    },
+    "CallSignal": {
+      "title": "CallSignal",
+      "description": "Real-time voice and video call signaling between devices",
+      "type": "object",
+      "properties": {
+        "callId": { "type": "string" },
+        "callerId": { "type": "string" },
+        "callerName": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "callType": { "type": "string" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["callId", "callerId", "receiverId", "callType", "status"]
+    }
+  },
+  "firestore": {
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Real-time chat messages collection"
+    },
+    "/calls/{callId}": {
+      "schema": "CallSignal",
+      "description": "Real-time voice and video call signaling collection"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of user stealth identities"
+    },
+    "/cloud_messages/{messageId}": {
+      "schema": "CloudMessage",
+      "description": "Ephemeral messages synced across devices"
+    }
+  }
+}

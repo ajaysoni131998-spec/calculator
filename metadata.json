@@ -1,0 +1,6 @@
+{
+  "name": "Calculator",
+  "description": "Clean modern calculator app with stealth private messenger vault, 10-second auto-destructing messages, private photo vault, and real-time audio/video calling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
